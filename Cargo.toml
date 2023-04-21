@@ -6,7 +6,7 @@ description = "Utilities for controlling your LIFX bulbs"
 repository = "https://github.com/turtlekingster/lifx"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-edition = "2023"
+edition = "2021"
 
 [workspace]
 members = [
