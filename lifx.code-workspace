@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Default High Contrast",
+		"bracket-pair-colorizer-2.depreciation-notice": false,
+		"window.zoomLevel": -1,
+		"[python]": {
+			"editor.formatOnType": true
+		},
+		"[rust]": {
+			"editor.defaultFormatter": "rust-lang.rust-analyzer",
+			"editor.inlayHints.enabled": "offUnlessPressed"
+		},
+		"rust-analyzer.cargo.target": "x86_64-unknown-linux-gnu"
+	}
+}
