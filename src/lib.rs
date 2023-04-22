@@ -183,7 +183,7 @@ pub mod bulb_manager {
                 };
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
-
+            }
             Ok(())
         }
 
