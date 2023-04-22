@@ -275,7 +275,7 @@ pub mod bulb_manager {
                 if let Some(info) = get_product_info(*vendor, *product) {
                     if info.extended {
                         if let Some(zones) = self.zones.as_ref() {
-                            write!(f, "(ZC:{}, ZI:{}, ZCC:{})", zones.zones_count, zones.zone_index, zones.colors_count);
+                            write!(f, "(ZC:{}, ZI:{}, ZCC:{})", zones.zones_count, zones.zone_index, zones.colors_count)?;
                         }
                     }
                 }
