@@ -96,6 +96,10 @@ pub mod bulb_manager {
             }
         }
 
+        fn iterateSeq(&mut self) {
+            self.options.sequence += 1;
+        }
+
         fn update(&mut self, addr: SocketAddr) {
             self.last_seen = Instant::now();
             self.addr = addr;
@@ -174,7 +178,7 @@ pub mod bulb_manager {
             Ok(())
         }
         pub fn set_strip_array(
-            &mut self,
+            &self,
             sock: &UdpSocket,
             colors: Box<[HSBK; 82]>,
             duration: u32,
@@ -190,13 +194,7 @@ pub mod bulb_manager {
                 println!("{:?}", payload);
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
-                self.options = BuildOptions {
-                    target: self.options.target,
-                    ack_required: self.options.ack_required,
-                    res_required: self.options.res_required,
-                    sequence: self.options.sequence + 1,
-                    source: self.options.source,
-                };
+                self.iterateSeq();
             }
             Ok(())
         }
