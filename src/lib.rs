@@ -1,6 +1,8 @@
 pub mod bulb_manager {
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
-    use lifx_core::{get_product_info, BuildOptions, Message, RawMessage, Service, HSBK, PowerLevel};
+    use lifx_core::{
+        get_product_info, BuildOptions, Message, PowerLevel, RawMessage, Service, HSBK,
+    };
     use std::collections::HashMap;
     // use std::error::Error;
     use std::ffi::CString;
@@ -75,7 +77,7 @@ pub mod bulb_manager {
                 addr,
                 options: BuildOptions {
                     target: Some(target),
-                    ack_required: false,
+                    ack_required: true,
                     res_required: true,
                     source: source,
                     sequence: 0,
@@ -149,12 +151,7 @@ pub mod bulb_manager {
             Ok(())
         }
 
-
-        pub fn set_power(
-            &self,
-            sock: &UdpSocket,
-            level: PowerLevel,
-        ) -> Result<(), failure::Error> {
+        pub fn set_power(&self, sock: &UdpSocket, level: PowerLevel) -> Result<(), failure::Error> {
             let payload: Message = Message::SetPower { level: level };
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
             sock.send_to(&message.pack()?, self.addr)?;
@@ -176,13 +173,24 @@ pub mod bulb_manager {
             sock.send_to(&message.pack()?, self.addr)?;
             Ok(())
         }
-        pub fn set_strip_array(&self, sock: &UdpSocket, colors: Box<[HSBK; 82]>, duration: u32) -> Result<(), failure::Error> {
+        pub fn set_strip_array(
+            &self,
+            sock: &UdpSocket,
+            colors: Box<[HSBK; 82]>,
+            duration: u32,
+        ) -> Result<(), failure::Error> {
             if let Some(zones) = self.zones.as_ref() {
                 let payload: Message = Message::SetExtendedColorZones {
-                    duration: duration, apply: lifx_core::ApplicationRequest::Apply, zone_index: 0, colors_count: zones.colors_count, colors: colors
+                    duration: duration,
+                    apply: lifx_core::ApplicationRequest::Apply,
+                    zone_index: 0,
+                    colors_count: zones.colors_count,
+                    colors: colors,
                 };
+                println!("{}", payload);
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
+                self.options.sequence +=1;
             }
             Ok(())
         }
@@ -278,7 +286,11 @@ pub mod bulb_manager {
                 if let Some(info) = get_product_info(*vendor, *product) {
                     if info.extended {
                         if let Some(zones) = self.zones.as_ref() {
-                            write!(f, "(ZC:{}, ZI:{}, ZCC:{})", zones.zones_count, zones.zone_index, zones.colors_count)?;
+                            write!(
+                                f,
+                                "(ZC:{}, ZI:{}, ZCC:{})",
+                                zones.zones_count, zones.zone_index, zones.colors_count
+                            )?;
                         }
                     }
                 }
