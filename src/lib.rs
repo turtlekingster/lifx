@@ -134,7 +134,7 @@ pub mod bulb_manager {
             Ok(())
         }
 
-        pub fn set_power(
+        pub fn set_power_duration(
             &self,
             sock: &UdpSocket,
             level: u16,
@@ -144,6 +144,18 @@ pub mod bulb_manager {
                 level: level,
                 duration: duration,
             };
+            let message: RawMessage = RawMessage::build(&self.options, payload)?;
+            sock.send_to(&message.pack()?, self.addr)?;
+            Ok(())
+        }
+
+
+        pub fn set_power(
+            &self,
+            sock: &UdpSocket,
+            level: u16,
+        ) -> Result<(), failure::Error> {
+            let payload: Message = Message::SetPower { level: level };
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
             sock.send_to(&message.pack()?, self.addr)?;
             Ok(())
