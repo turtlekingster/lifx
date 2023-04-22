@@ -130,7 +130,7 @@ pub mod bulb_manager {
                 };
             }
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
-            sock.send_to(&message.pack()?, self.addr);
+            sock.send_to(&message.pack()?, self.addr)?;
             Ok(())
         }
 
@@ -145,7 +145,7 @@ pub mod bulb_manager {
                 duration: duration,
             };
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
-            sock.send_to(&message.pack()?, self.addr);
+            sock.send_to(&message.pack()?, self.addr)?;
             Ok(())
         }
 
@@ -161,7 +161,7 @@ pub mod bulb_manager {
                 duration: duration,
             };
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
-            sock.send_to(&message.pack()?, self.addr);
+            sock.send_to(&message.pack()?, self.addr)?;
             Ok(())
         }
         // pub fn set_strip_array(&self, sock: &UdpSocket) -> Result<(), failure::Error> {
