@@ -444,7 +444,9 @@ pub mod bulb_manager {
                         colors_count: colors_count,
                         colors: colors,
                     });
-                    println!("state: {:?}", colors.clone());
+                    if let Some(zones) = self.zones.as_ref() {
+                        println!("state: {:?}", zones.colors);
+                    }
                 }
                 Message::Acknowledgement { seq } => {
                     bulb.options.sequence = seq + 1;
