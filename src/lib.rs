@@ -176,13 +176,16 @@ pub mod bulb_manager {
             sock.send_to(&message.pack()?, self.addr)?;
             Ok(())
         }
-        // pub fn set_strip_array(&self, sock: &UdpSocket) -> Result<(), failure::Error> {
-        //     let payload: Message = Message::SetExtendedColorZones {
-        //         duration: (), apply: 1, zone_index: (), colors_count: (), colors: ()
-        //     };
+        pub fn set_strip_array(&self, sock: &UdpSocket, colors: Box<[HSBK; 82]>, duration: u32) -> Result<(), failure::Error> {
+            if let Some(zones) = self.zones.as_ref() {
+                let payload: Message = Message::SetExtendedColorZones {
+                    duration: duration, apply: 1, zone_index: 0, colors_count: zones.colors_count, colors: colors
+                };
+                let message: RawMessage = RawMessage::build(&self.options, payload)?;
+                sock.send_to(&message.pack()?, self.addr)?;
 
-        //     Ok(())
-        // }
+            Ok(())
+        }
 
         fn query_for_missing_info(&self, sock: &UdpSocket) -> Result<(), failure::Error> {
             self.refresh_if_needed(sock, &self.name)?;
