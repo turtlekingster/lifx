@@ -596,6 +596,7 @@ pub enum Service {
 #[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum PowerLevel {
     Standby = 0,
+    Half = 32500, 
     Enabled = 65535,
 }
 

@@ -1,6 +1,6 @@
 pub mod bulb_manager {
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
-    use lifx_core::{get_product_info, BuildOptions, Message, RawMessage, Service, HSBK};
+    use lifx_core::{get_product_info, BuildOptions, Message, RawMessage, Service, HSBK, PowerLevel};
     use std::collections::HashMap;
     // use std::error::Error;
     use std::ffi::CString;
@@ -153,7 +153,7 @@ pub mod bulb_manager {
         pub fn set_power(
             &self,
             sock: &UdpSocket,
-            level: u16,
+            level: PowerLevel,
         ) -> Result<(), failure::Error> {
             let payload: Message = Message::SetPower { level: level };
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
