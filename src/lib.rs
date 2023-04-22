@@ -7,7 +7,7 @@ pub mod bulb_manager {
     use std::ffi::CString;
     use std::net::{IpAddr, SocketAddr, UdpSocket};
     use std::sync::{Arc, Mutex};
-    use std::thread::{sleep, spawn};
+    use std::thread::{spawn};
     use std::time::{Duration, Instant};
 
     const HOUR: Duration = Duration::from_secs(60 * 60);
@@ -41,6 +41,13 @@ pub mod bulb_manager {
         }
     }
 
+    pub struct Zones {
+        zones_count: u16,
+        zone_index: u16,
+        colors_count: u8,
+        colors: Box<HSBK, 82>,
+    }
+
     pub struct BulbInfo {
         pub last_seen: Instant,
         pub options: BuildOptions,
@@ -51,6 +58,7 @@ pub mod bulb_manager {
         pub host_firmware: RefreshableData<(u16, u16)>,
         pub wifi_firmware: RefreshableData<(u16, u16)>,
         pub power_level: RefreshableData<u16>,
+        pub zones: RefreshableData<Zones>,
         pub color: Color,
     }
 
@@ -79,6 +87,7 @@ pub mod bulb_manager {
                 host_firmware: RefreshableData::empty(HOUR, Message::GetHostFirmware),
                 wifi_firmware: RefreshableData::empty(HOUR, Message::GetWifiFirmware),
                 power_level: RefreshableData::empty(Duration::from_secs(15), Message::GetPower),
+                zones: RefreshableData::empty(Duration::from_secs(15), Message::GetExtendedColorZones),
                 color: Color::Unknown,
             }
         }
@@ -123,10 +132,24 @@ pub mod bulb_manager {
             Ok(())
         }
 
+        pub fn set_power(&self, sock: &UdpSocket, level: u16, duration: u32) -> Result<(), failure::Error> {
+            let payload: Message = Message::LightSetPower { level: level, duration: duration };
+            let message: RawMessage = RawMessage::build(&self.options, payload)?;
+            sock.send_to(&message.pack()?, self.addr);
+            Ok(())
+        }
+
         pub fn set_bulb_color(&self, sock: &UdpSocket, color: HSBK, duration: u32) -> Result<(), failure::Error> {
             let payload: Message = Message::LightSetColor { reserved: 0, color: color, duration: duration };
             let message: RawMessage = RawMessage::build(&self.options, payload)?;
             sock.send_to(&message.pack()?, self.addr);
+            Ok(())
+        }
+        pub fn set_strip_array(&self, sock: &UdpSocket) -> Result<(), failur::Error> {
+            let payload: message = Message::SetExtendedColorZones { 
+                duration: (), apply: 1, zone_index: (), colors_count: (), colors: () 
+            };
+
             Ok(())
         }
 
@@ -342,6 +365,20 @@ pub mod bulb_manager {
                         v[index as usize + 6] = Some(color6);
                         v[index as usize + 7] = Some(color7);
                     }
+                }
+                Message::StateExtendedColorZones {
+                    zones_count,
+                    zone_index,
+                    colors_count,
+                    colors,
+                } => {
+
+                    if let (ref mut d) = bulb.zones {
+                        d.update(color);
+                        bulb.power_level.update(power);
+                    }
+                    bulb.name.update(label.cstr().to_owned());
+                    bulb.zones
                 }
                 unknown => {
                     println!("Received, but ignored {:?}", unknown);
