@@ -1,12 +1,13 @@
 pub mod bulb_manager {
+    use bincode::{deserialize, serialize};
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
     use lifx_core::{
         get_product_info, BuildOptions, Message, PowerLevel, RawMessage, Service, HSBK,
     };
     use std::collections::HashMap;
-    // use std::error::Error;
     use std::ffi::CString;
     use std::net::{IpAddr, SocketAddr, UdpSocket};
+    use std::result;
     use std::sync::{Arc, Mutex};
     use std::thread::spawn;
     use std::time::{Duration, Instant};
@@ -48,7 +49,7 @@ pub mod bulb_manager {
         colors_count: u8,
         colors: Box<[HSBK; 82]>,
     }
-
+    #[derive(Serialize, Deserialize, Debug)]
     pub struct BulbInfo {
         pub last_seen: Instant,
         pub options: BuildOptions,
@@ -449,7 +450,7 @@ pub mod bulb_manager {
                     // }
                 }
                 Message::Acknowledgement { seq } => {
-                    bulb.options.sequence = (seq % 255) +1;
+                    bulb.options.sequence = (seq % 255) + 1;
                     println!("Awk: {} {}", bulb.addr, bulb.options.sequence);
                 }
                 unknown => {
@@ -528,6 +529,28 @@ pub mod bulb_manager {
                 for bulb in bulbs {
                     bulb.query_for_missing_info(&self.sock).unwrap();
                 }
+            }
+        }
+
+        pub fn save_bulbs(&self) -> Result<Vec<u8>, failure::Error>{
+            let encoded: Vec<u8>;
+            if let OK(bulbs) = self.bulbs.lock() {
+                let bulbs = bulbs.values();
+                encoded = serialize(&bulbs).unwrap();
+            }
+            Ok(encoded)
+        }
+
+        pub fn load_bulbs(&self, encoded: Vec<u8>) {
+            if let Ok(bulbs) = self.bulbs.lock() {
+                let bulbs = bulbs.values();
+                bulbs = deserialize(&encoded).unwrap();
+            }
+        }
+
+        pub fn clear_bulbs(&self) {
+            if let Ok(bulbs) = self.bulbs.lock() {
+                bulbs = Arc::new(Mutex::new(HashMap::new()));
             }
         }
     }
