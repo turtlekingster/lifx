@@ -1,3 +1,4 @@
+
 pub mod bulb_manager {
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
     use lifx_core::{get_product_info, BuildOptions, Message, RawMessage, Service, HSBK};
