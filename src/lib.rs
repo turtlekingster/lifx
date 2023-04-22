@@ -49,7 +49,7 @@ pub mod bulb_manager {
         colors_count: u8,
         colors: Box<[HSBK; 82]>,
     }
-    #[derive(Serialize, Deserialize, Debug)]
+    // #[derive(Serialize, Deserialize, Debug)]
     pub struct BulbInfo {
         pub last_seen: Instant,
         pub options: BuildOptions,
@@ -534,7 +534,7 @@ pub mod bulb_manager {
 
         pub fn save_bulbs(&self) -> Result<Vec<u8>, failure::Error>{
             let encoded: Vec<u8>;
-            if let OK(bulbs) = self.bulbs.lock() {
+            if let Ok(bulbs) = self.bulbs.lock() {
                 let bulbs = bulbs.values();
                 encoded = serialize(&bulbs).unwrap();
             }
@@ -543,7 +543,7 @@ pub mod bulb_manager {
 
         pub fn load_bulbs(&self, encoded: Vec<u8>) {
             if let Ok(bulbs) = self.bulbs.lock() {
-                let bulbs = bulbs.values();
+                let mut bulbs = bulbs.values();
                 bulbs = deserialize(&encoded).unwrap();
             }
         }
