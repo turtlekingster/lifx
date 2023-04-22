@@ -174,7 +174,7 @@ pub mod bulb_manager {
             Ok(())
         }
         pub fn set_strip_array(
-            &self,
+            &mut self,
             sock: &UdpSocket,
             colors: Box<[HSBK; 82]>,
             duration: u32,
