@@ -165,8 +165,12 @@ pub mod bulb_manager {
                 Color::Single(d) => self.refresh_if_needed(sock, d)?,
                 Color::Multi(d) => self.refresh_if_needed(sock, d)?,
             }
-            match self.model.data[1] { //product id
-                32 => self.refresh_if_needed(sock, &self.zones)?
+            if let Some((vendor, product)) = self.model.as_ref() {
+                if let Some(info) = get_product_info(*vendor, *product) {
+                    if info.extended {
+                        self.refresh_if_needed(sock, &self.zones);
+                    }
+                }
             }
             Ok(())
         }
