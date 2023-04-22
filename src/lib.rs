@@ -96,10 +96,6 @@ pub mod bulb_manager {
             }
         }
 
-        fn iterateSeq(&mut self) {
-            self.options.sequence += 1;
-        }
-
         fn update(&mut self, addr: SocketAddr) {
             self.last_seen = Instant::now();
             self.addr = addr;
@@ -448,6 +444,10 @@ pub mod bulb_manager {
                         colors_count: colors_count,
                         colors: colors,
                     });
+                }
+                Message::Acknowledgement { seq } => {
+                    bulb.options.sequence = seq + 1;
+                    println!("Awk: {} {}", bulb.addr, bulb.options.sequence);
                 }
                 unknown => {
                     println!("Received, but ignored {:?}", unknown);
