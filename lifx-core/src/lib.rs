@@ -1329,7 +1329,7 @@ impl Message {
             Message::SetMultiZoneEffect { .. } => 508,
             Message::StateMultiZoneEffect { .. } => 509,
             Message::SetExtendedColorZones { .. } => 510,
-            Message::GetExtendedColorZone => 511,
+            Message::GetExtendedColorZones => 511,
             Message::StateExtendedColorZones { .. } => 512,
             Message::RelayGetPower { .. } => 816,
             Message::RelaySetPower { .. } => 817,
@@ -1576,7 +1576,7 @@ impl Message {
                 colors_count: u8,
                 colors: [HSBK; 82]
             )),
-            511 => Ok(Message::GetExtendedColorZone),
+            511 => Ok(Message::GetExtendedColorZones),
             512 => Ok(unpack!(
                 msg,
                 StateExtendedColorZones,
@@ -2006,7 +2006,7 @@ impl RawMessage {
             | Message::LightGetHevCycleConfiguration
             | Message::LightGetLastHevCycleResult
             | Message::GetMultiZoneEffect
-            | Message::GetExtendedColorZone => {
+            | Message::GetExtendedColorZones => {
                 // these types have no payload
             }
             Message::SetColorZones {
