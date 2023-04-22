@@ -187,7 +187,7 @@ pub mod bulb_manager {
                     colors_count: zones.colors_count,
                     colors: colors,
                 };
-                println!("{}", payload);
+                println!("{:?}", payload);
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
                 self.options.sequence +=1;
