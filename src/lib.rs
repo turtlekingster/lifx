@@ -194,7 +194,7 @@ pub mod bulb_manager {
                 println!("{:?}", payload);
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
-                self.iterateSeq();
+                &self.iterateSeq();
             }
             Ok(())
         }
