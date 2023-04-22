@@ -449,7 +449,7 @@ pub mod bulb_manager {
                     // }
                 }
                 Message::Acknowledgement { seq } => {
-                    bulb.options.sequence = seq + 1 % 255;
+                    bulb.options.sequence = (seq % 255) +1;
                     println!("Awk: {} {}", bulb.addr, bulb.options.sequence);
                 }
                 unknown => {
