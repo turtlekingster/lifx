@@ -145,13 +145,13 @@ pub mod bulb_manager {
             sock.send_to(&message.pack()?, self.addr);
             Ok(())
         }
-        pub fn set_strip_array(&self, sock: &UdpSocket) -> Result<(), failur::Error> {
-            let payload: message = Message::SetExtendedColorZones { 
-                duration: (), apply: 1, zone_index: (), colors_count: (), colors: () 
-            };
+        // pub fn set_strip_array(&self, sock: &UdpSocket) -> Result<(), failure::Error> {
+        //     let payload: Message = Message::SetExtendedColorZones { 
+        //         duration: (), apply: 1, zone_index: (), colors_count: (), colors: () 
+        //     };
 
-            Ok(())
-        }
+        //     Ok(())
+        // }
 
         fn query_for_missing_info(&self, sock: &UdpSocket) -> Result<(), failure::Error> {
             self.refresh_if_needed(sock, &self.name)?;
@@ -165,7 +165,9 @@ pub mod bulb_manager {
                 Color::Single(d) => self.refresh_if_needed(sock, d)?,
                 Color::Multi(d) => self.refresh_if_needed(sock, d)?,
             }
-
+            match self.model.data[1] { //product id
+                32 => self.refresh_if_needed(sock, &self.zones)?
+            }
             Ok(())
         }
     }
@@ -183,6 +185,7 @@ pub mod bulb_manager {
             if let Some((vendor, product)) = self.model.as_ref() {
                 if let Some(info) = get_product_info(*vendor, *product) {
                     write!(f, " - {} ", info.name)?;
+                    write!(f, " - {} ", product)?;
                 } else {
                     write!(
                         f,
@@ -372,13 +375,10 @@ pub mod bulb_manager {
                     colors_count,
                     colors,
                 } => {
-
                     if let (ref mut d) = bulb.zones {
-                        d.update(color);
-                        bulb.power_level.update(power);
+                        d.update(Zones { zones_count: zones_count, zone_index:zone_index, colors_count: colors_count, colors: colors });
+                        bulb.zones.update(d);
                     }
-                    bulb.name.update(label.cstr().to_owned());
-                    bulb.zones
                 }
                 unknown => {
                     println!("Received, but ignored {:?}", unknown);
