@@ -1222,7 +1222,7 @@ pub enum Message {
     },
 
     /// Message type 511
-    GetExtendedColorZone,
+    GetExtendedColorZones,
 
     /// Message type 512
     StateExtendedColorZones {

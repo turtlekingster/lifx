@@ -381,7 +381,7 @@ pub mod bulb_manager {
                 } => {
                     if let ref mut d = bulb.zones {
                         d.update(Zones { zones_count: zones_count, zone_index:zone_index, colors_count: colors_count, colors: colors });
-                        bulb.zones.update(d);
+                        bulb.zones.update(d.unwrap());
                     }
                 }
                 unknown => {
