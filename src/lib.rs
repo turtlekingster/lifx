@@ -444,7 +444,7 @@ pub mod bulb_manager {
                         colors_count: colors_count,
                         colors: colors,
                     });
-                    if let Some(zones) = self.zones.as_ref() {
+                    if let Some(zones) = bulb.zones.as_ref() {
                         println!("state: {:?}", zones.colors);
                     }
                 }
