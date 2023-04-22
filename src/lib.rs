@@ -45,7 +45,7 @@ pub mod bulb_manager {
         zones_count: u16,
         zone_index: u16,
         colors_count: u8,
-        colors: Box<HSBK, 82>,
+        colors: Box<[HSBK; 82]>,
     }
 
     pub struct BulbInfo {
@@ -375,7 +375,7 @@ pub mod bulb_manager {
                     colors_count,
                     colors,
                 } => {
-                    if let (ref mut d) = bulb.zones {
+                    if let ref mut d = bulb.zones {
                         d.update(Zones { zones_count: zones_count, zone_index:zone_index, colors_count: colors_count, colors: colors });
                         bulb.zones.update(d);
                     }
