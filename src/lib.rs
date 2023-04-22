@@ -187,7 +187,7 @@ pub mod bulb_manager {
             if let Some((vendor, product)) = self.model.as_ref() {
                 if let Some(info) = get_product_info(*vendor, *product) {
                     if info.extended {
-                        self.refresh_if_needed(sock, &self.zones);
+                        self.refresh_if_needed(sock, &self.zones)?;
                     }
                 }
             }
