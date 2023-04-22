@@ -179,7 +179,7 @@ pub mod bulb_manager {
         pub fn set_strip_array(&self, sock: &UdpSocket, colors: Box<[HSBK; 82]>, duration: u32) -> Result<(), failure::Error> {
             if let Some(zones) = self.zones.as_ref() {
                 let payload: Message = Message::SetExtendedColorZones {
-                    duration: duration, apply: 1, zone_index: 0, colors_count: zones.colors_count, colors: colors
+                    duration: duration, apply: lifx_core::ApplicationRequest::Apply, zone_index: 0, colors_count: zones.colors_count, colors: colors
                 };
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
