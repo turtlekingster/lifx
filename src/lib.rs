@@ -190,7 +190,13 @@ pub mod bulb_manager {
                 println!("{:?}", payload);
                 let message: RawMessage = RawMessage::build(&self.options, payload)?;
                 sock.send_to(&message.pack()?, self.addr)?;
-                &self.options.sequence +=1;
+                self.options = BuildOptions {
+                    target: self.options.target,
+                    ack_required: self.options.ack_required,
+                    res_required: self.options.res_required,
+                    sequence: self.options.sequence + 1,
+                    source: self.options.source,
+                };
             }
             Ok(())
         }
