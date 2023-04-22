@@ -2,7 +2,7 @@ pub mod bulb_manager {
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
     use lifx_core::{get_product_info, BuildOptions, Message, RawMessage, Service, HSBK};
     use std::collections::HashMap;
-    use std::error::Error;
+    // use std::error::Error;
     use std::ffi::CString;
     use std::net::{IpAddr, SocketAddr, UdpSocket};
     use std::sync::{Arc, Mutex};
@@ -408,7 +408,7 @@ pub mod bulb_manager {
                         zone_index: zone_index,
                         colors_count: colors_count,
                         colors: colors,
-                    });ß
+                    });
                 }
                 unknown => {
                     println!("Received, but ignored {:?}", unknown);
