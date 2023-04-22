@@ -444,7 +444,7 @@ pub mod bulb_manager {
                         colors_count: colors_count,
                         colors: colors,
                     });
-                    println!("state: {:?}", colors);
+                    println!("state: {:?}", colors.clone());
                 }
                 Message::Acknowledgement { seq } => {
                     bulb.options.sequence = seq + 1;
