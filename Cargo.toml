@@ -20,3 +20,4 @@ members = [
 [lib]
 
 [dependencies]
+lifx-core = {path =  "../../lifx-core"}
