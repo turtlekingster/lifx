@@ -532,26 +532,5 @@ pub mod bulb_manager {
             }
         }
 
-        pub fn save_bulbs(&self) -> Result<Vec<u8>, failure::Error>{
-            let encoded: Vec<u8>;
-            if let Ok(bulbs) = self.bulbs.lock() {
-                let bulbs = bulbs.values();
-                encoded = serialize(&bulbs).unwrap();
-            }
-            Ok(encoded)
-        }
-
-        pub fn load_bulbs(&self, encoded: Vec<u8>) {
-            if let Ok(bulbs) = self.bulbs.lock() {
-                let mut bulbs = bulbs.values();
-                bulbs = deserialize(&encoded).unwrap();
-            }
-        }
-
-        pub fn clear_bulbs(&self) {
-            if let Ok(bulbs) = self.bulbs.lock() {
-                bulbs = Arc::new(Mutex::new(HashMap::new()));
-            }
-        }
     }
 }
