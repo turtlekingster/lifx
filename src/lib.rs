@@ -96,9 +96,9 @@ pub mod bulb_manager {
                 color: Color::Unknown,
             }
         }
-        pub fn get_colors(&mut self) -> Box<[HSBK; 82]>{
-            let Some(zones) = self.zones.as_ref();
-            zones.colors
+        pub fn get_colors(&mut self) -> Result<Box<[HSBK; 82]>, failure:Error>{
+            let Some(zones) = self.zones.as_ref() else {Ok(())};
+            Ok(zones.colors)
         }
 
         fn update(&mut self, addr: SocketAddr) {
