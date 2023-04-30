@@ -96,6 +96,9 @@ pub mod bulb_manager {
                 color: Color::Unknown,
             }
         }
+        pub fn get_colors(&mut self) -> Box<[HSBK; 82]>{
+            self.zones.colors
+        }
 
         fn update(&mut self, addr: SocketAddr) {
             self.last_seen = Instant::now();
