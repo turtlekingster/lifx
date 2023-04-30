@@ -1,5 +1,5 @@
 pub mod bulb_manager {
-    use bincode::{deserialize, serialize};
+    
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
     use lifx_core::{
         get_product_info, BuildOptions, Message, PowerLevel, RawMessage, Service, HSBK,
@@ -7,7 +7,7 @@ pub mod bulb_manager {
     use std::collections::HashMap;
     use std::ffi::CString;
     use std::net::{IpAddr, SocketAddr, UdpSocket};
-    use std::result;
+    
     use std::sync::{Arc, Mutex};
     use std::thread::spawn;
     use std::time::{Duration, Instant};
