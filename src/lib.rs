@@ -97,7 +97,7 @@ pub mod bulb_manager {
             }
         }
         pub fn get_colors(&mut self) -> Box<[HSBK; 82]>{
-            self.zones.colors
+            self.zones.as_ref().colors
         }
 
         fn update(&mut self, addr: SocketAddr) {
