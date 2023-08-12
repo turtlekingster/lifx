@@ -454,7 +454,7 @@ pub mod bulb_manager {
                 }
                 Message::Acknowledgement { seq } => {
                     bulb.options.sequence = (seq % 255) + 1;
-                    println!("Awk: {} {}", bulb.addr, bulb.options.sequence);
+                    //println!("Awk: {} {}", bulb.addr, bulb.options.sequence);
                 }
                 unknown => {
                     println!("Received, but ignored {:?}", unknown);
@@ -533,6 +533,12 @@ pub mod bulb_manager {
                     bulb.query_for_missing_info(&self.sock).unwrap();
                 }
             }
+        }
+
+        pub fn add_bulb(&mut self, addr: SocketAddr) {
+            let rawmsg = RawMessage::build(&opts, Message::GetService).unwrap();
+            let bytes = rawmsg.pack().unwrap();
+            self.sock.send_to(&bytes, &addr);
         }
 
     }
