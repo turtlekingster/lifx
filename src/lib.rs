@@ -330,7 +330,6 @@ pub mod bulb_manager {
                 sock,
                 source,
             };
-            mgr.discover()?;
             Ok(mgr)
         }
 
