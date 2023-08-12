@@ -536,6 +536,10 @@ pub mod bulb_manager {
         }
 
         pub fn add_bulb(&mut self, addr: SocketAddr) {
+            let opts = BuildOptions {
+                source: self.source,
+                ..Default::default()
+            };
             let rawmsg = RawMessage::build(&opts, Message::GetService).unwrap();
             let bytes = rawmsg.pack().unwrap();
             self.sock.send_to(&bytes, &addr);
