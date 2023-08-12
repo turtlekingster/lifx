@@ -324,7 +324,7 @@ pub mod bulb_manager {
             // spawn a thread that will receive data from our socket and update our internal data structures
             spawn(move || Self::worker(recv_sock, source, receiver_bulbs));
 
-            let mut mgr = Manager {
+            let mgr = Manager {
                 bulbs,
                 last_discovery: Instant::now(),
                 sock,
