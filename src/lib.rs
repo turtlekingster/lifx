@@ -73,6 +73,7 @@ pub mod bulb_manager {
 
     impl BulbInfo {
         fn new(source: u32, target: u64, addr: SocketAddr) -> BulbInfo {
+            println!("New bulb at: {:?}", addr);
             BulbInfo {
                 last_seen: Instant::now(),
                 addr,
@@ -541,6 +542,7 @@ pub mod bulb_manager {
             };
             let rawmsg = RawMessage::build(&opts, Message::GetService).unwrap();
             let bytes = rawmsg.pack().unwrap();
+            println!("Attempting connection to: {:?}", addr);
             self.sock.send_to(&bytes, &addr)?;
             Ok(())
         }
