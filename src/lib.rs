@@ -16,7 +16,7 @@ pub mod bulb_manager {
 
     const HOUR: Duration = Duration::from_secs(60 * 60);
 
-    #[derive(Debug)]
+    #[derive(Debug, Serialize, Deserialize)]
     pub struct RefreshableData<T> {
         pub data: Option<T>,
         pub max_age: Duration,
@@ -44,7 +44,7 @@ pub mod bulb_manager {
             self.data.as_ref()
         }
     }
-
+    #[derive(Serialize, Deserialize)]
     pub struct Zones {
         zones_count: u16,
         zone_index: u16,
@@ -66,7 +66,7 @@ pub mod bulb_manager {
         pub color: Color,
     }
 
-    #[derive(Debug)]
+    #[derive(Debug, Serialize, Deserialize)]
     pub enum Color {
         Unknown,
         Single(RefreshableData<HSBK>),
