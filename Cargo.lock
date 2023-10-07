@@ -175,6 +175,7 @@ dependencies = [
  "failure",
  "get_if_addrs",
  "lifx-core",
+ "serde",
 ]
 
 [[package]]

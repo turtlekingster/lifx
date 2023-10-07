@@ -1,3 +1,6 @@
+use serde::Serialize;
+use serde::Deserialize;
+
 pub mod bulb_manager {
     
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
@@ -49,7 +52,7 @@ pub mod bulb_manager {
         colors_count: u8,
         colors: Box<[HSBK; 82]>,
     }
-    #[derive(Serialize, Deserialize, Debug)]
+    #[derive(Serialize, Deserialize)]
     pub struct BulbInfo {
         pub last_seen: Instant,
         pub options: BuildOptions,
