@@ -7,8 +7,6 @@ pub mod bulb_manager {
     use std::collections::HashMap;
     use std::ffi::CString;
     use std::net::{IpAddr, SocketAddr, UdpSocket};
-    use serde::Serialize;
-    use serde::Deserialize;
     
     use std::sync::{Arc, Mutex};
     use std::thread::spawn;
@@ -16,7 +14,7 @@ pub mod bulb_manager {
 
     const HOUR: Duration = Duration::from_secs(60 * 60);
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug)]
     pub struct RefreshableData<T> {
         pub data: Option<T>,
         pub max_age: Duration,
@@ -44,14 +42,12 @@ pub mod bulb_manager {
             self.data.as_ref()
         }
     }
-    #[derive(Serialize, Deserialize)]
     pub struct Zones {
-        zones_count: u16,
+        pub zones_count: u16,
         zone_index: u16,
         colors_count: u8,
         colors: Box<[HSBK; 82]>,
     }
-    #[derive(Serialize, Deserialize)]
     pub struct BulbInfo {
         pub last_seen: Instant,
         pub options: BuildOptions,
@@ -66,7 +62,7 @@ pub mod bulb_manager {
         pub color: Color,
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug)]
     pub enum Color {
         Unknown,
         Single(RefreshableData<HSBK>),
