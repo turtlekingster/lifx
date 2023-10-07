@@ -30,6 +30,8 @@ use std::ffi::{CStr, CString};
 use std::io;
 use std::io::Cursor;
 use thiserror::Error;
+use serde::Serialize;
+use serde::Deserialize;
 
 #[cfg(fuzzing)]
 #[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
@@ -1608,7 +1610,7 @@ impl Message {
 /// When a light is displaying colors, kelvin is ignored.
 ///
 /// To display "pure" colors, set saturation to full (65535).
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct HSBK {
     pub hue: u16,
