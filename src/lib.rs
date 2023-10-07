@@ -49,7 +49,7 @@ pub mod bulb_manager {
         colors_count: u8,
         colors: Box<[HSBK; 82]>,
     }
-    // #[derive(Serialize, Deserialize, Debug)]
+    #[derive(Serialize, Deserialize, Debug)]
     pub struct BulbInfo {
         pub last_seen: Instant,
         pub options: BuildOptions,
@@ -312,20 +312,20 @@ pub mod bulb_manager {
 
     impl Manager {
         pub fn new() -> Result<Manager, failure::Error> {
-            let sock = UdpSocket::bind("0.0.0.0:56700")?;
+            let sock: UdpSocket = UdpSocket::bind("0.0.0.0:56700")?;
             sock.set_broadcast(true)?;
 
             // spawn a thread that can send to our socket
-            let recv_sock = sock.try_clone()?;
+            let recv_sock: UdpSocket = sock.try_clone()?;
 
-            let bulbs = Arc::new(Mutex::new(HashMap::new()));
-            let receiver_bulbs = bulbs.clone();
-            let source = 0x72757374;
+            let bulbs: Arc<Mutex<HashMap<u64, BulbInfo>>> = Arc::new(Mutex::new(HashMap::new()));
+            let receiver_bulbs: Arc<Mutex<HashMap<u64, BulbInfo>>> = bulbs.clone();
+            let source: u32 = 0x72757374;
 
             // spawn a thread that will receive data from our socket and update our internal data structures
             spawn(move || Self::worker(recv_sock, source, receiver_bulbs));
 
-            let mgr = Manager {
+            let mgr: Manager = Manager {
                 bulbs,
                 last_discovery: Instant::now(),
                 sock,
