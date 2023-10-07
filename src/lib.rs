@@ -1,6 +1,3 @@
-use serde::Serialize;
-use serde::Deserialize;
-
 pub mod bulb_manager {
     
     use get_if_addrs::{get_if_addrs, IfAddr, Ifv4Addr};
@@ -10,6 +7,8 @@ pub mod bulb_manager {
     use std::collections::HashMap;
     use std::ffi::CString;
     use std::net::{IpAddr, SocketAddr, UdpSocket};
+    use serde::Serialize;
+    use serde::Deserialize;
     
     use std::sync::{Arc, Mutex};
     use std::thread::spawn;
