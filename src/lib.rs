@@ -98,6 +98,9 @@ pub mod bulb_manager {
         pub fn get_colors(&mut self) -> Result<Box<[HSBK; 82]>, failure::Error>{
             Ok(self.zones.as_ref().unwrap().colors.clone())
         }
+        pub fn get_length(&mut self) -> Result<u32, failure:Error>{
+            Ok(self.zones.as_ref().unwrap().zones_count.clone().into())
+        }
 
         fn update(&mut self, addr: SocketAddr) {
             self.last_seen = Instant::now();
